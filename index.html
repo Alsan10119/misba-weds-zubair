@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wedding Invitation | Dr. Misba & Zubair</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Iconify for Icons -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    
+    <!-- Canvas Confetti Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- SEO & Social Sharing Meta Tags -->
+    <meta name="description" content="Wedding Invitation of Dr. Misba & Zubair. Celebrating Love & Happiness.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Wedding Invitation | Dr. Misba & Zubair">
+    <meta property="og:description" content="Celebrating Love & Happiness. Join us on 16th December 2026.">
+    <meta property="og:image" content="assests/images/cover1.png">
+</head>
+<body>
+
+    <!-- Background Music Audio -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="assests/audio/music1.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Floating Music Toggle Button -->
+    <button id="musicToggle" class="music-toggle" aria-label="Toggle music">
+        <iconify-icon icon="lucide:volume-x" id="musicIcon" style="font-size: 20px; color: var(--text-primary);"></iconify-icon>
+    </button>
+
+    <!-- Hero / Opening Curtain Section -->
+    <section class="hero-section" id="heroSection">
+        <div class="video-container">
+            <img id="videoPoster" src="assests/images/first.png" class="video-placeholder" alt="Wedding Invitation Poster">
+            
+            <video id="curtainVideo" playsinline webkit-playsinline preload="auto">
+                <source src="assests/videos/nadavd.mp4" type="video/mp4">
+            </video>
+
+            <div class="safar-text" id="safarText">
+                Celebrating Love &amp; Happiness...
+            </div>
+
+            <!-- Tap to Open Overlay -->
+            <div id="playOverlay" class="overlay">
+                <div class="play-button">
+                    <iconify-icon icon="majesticons:hand-click-line" class="hand-icon"></iconify-icon>
+                </div>
+                <p class="tap-text">Open Invitation</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Details & Invitation Card Section -->
+    <section class="details-section" id="detailsSection">
+        <img src="assests/images/topf.png" class="topf-image" alt="Floral Decoration Top">
+        <img src="assests/images/light.png" class="light-image" alt="Chandelier Light Decoration">
+
+        <div class="content-wrapper scroll-animate">
+            <div class="hero-intro-box">
+                <div>
+                    <p class="small-text tracking-wide" style="margin-bottom: 12px; letter-spacing: 3px;">
+                        <strong>ANGUR FAMILY PRESENTS</strong>
+                    </p>
+                    <h1 class="names">DR. MISBA<br><span class="ampersand">-♡-</span><br>ZUBAIR</h1>
+                </div>
+
+                <!-- Custom Royal MZ Monogram Badge -->
+                <div class="mz-crest-wrapper">
+                    <div class="mz-crest">
+                        <span class="crest-letters">MZ</span>
+                    </div>
+                </div>
+
+                <p class="small-text tracking-wide" style="margin-bottom: 15px;">
+                    <strong>CELEBRATING LOVE &amp; HAPPINESS<br>WE CORDIALLY INVITE YOU TO CELEBRATE WITH US</strong>
+                </p>
+                
+                <!-- Scroll Indicator Bar -->
+                <div class="scroll-indicator-container">
+                    <div class="scroll-indicator-bar"></div>
+                    <span class="scroll-indicator-text">scroll</span>
+                </div>
+            </div>
+
+            <!-- Bismillah & Family Blessings -->
+            <div class="bismillah-frame-wrapper">
+                <div class="bismillah-text-container">
+                    <h2 class="bismillah-arabic">
+                        بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ
+                    </h2>
+
+                    <p class="small-text tracking-wide" style="margin-bottom: 12px;">
+                        <strong>In the name of Allah, the Most Beneficent &amp; the Most Merciful</strong>
+                    </p>
+
+                    <p class="small-text tracking-wide" style="margin-bottom: 6px; opacity: 0.85;">
+                        Remember In Your Prayers
+                    </p>
+                    <strong style="font-size: 1.15em; letter-spacing: 1px; display: block; margin-bottom: 22px;">
+                        LATE HAJI SHAMIM AHMED KAMALUDDIN
+                    </strong>
+                    
+                    <strong style="font-size: 1.35em; letter-spacing: 1.5px; display: block; line-height: 1.3;">
+                        MR. HAJI ZAINUL ABEDIN KAMALUDDIN
+                    </strong>
+                    <span class="family-tagline">(Angur Group / Ex-BJP General Secretary Minority Morcha, Gujarat)</span>
+                </div>
+            </div>
+
+            <!-- Invitation Text & Couple Names -->
+            <div class="couple-card-block">
+                <p class="details-text" style="margin-bottom: 30px; line-height: 1.8; font-weight: bold;">
+                    Solicit your gracious presence &amp; blessings on the auspicious ceremony of the Nikah of their beloved daughter
+                </p>
+
+                <!-- Bride -->
+                <div class="bride-name-box">
+                    Dr. Misba
+                </div>
+                <span class="parent-line">
+                    D/o Mr. Haji Zainul Abedin Kamaluddin
+                </span>
+
+                <div class="with-text">weds</div>
+
+                <!-- Groom -->
+                <div class="groom-name-box">
+                    Zubair
+                </div>
+                <span class="parent-line">
+                    S/o Haji Yahya Sahab (Delhi)
+                </span>
+
+                <img src="assests/images/fl.png" alt="Decorative Ornament" class="ringg-image">
+            </div>
+        </div>
+    </section>
+
+    <!-- Scratch Section - Date Reveal -->
+    <section class="scratch-section">
+        <div class="content-wrapper scroll-animate">
+            <p class="reveal-text">Reveal</p>
+            <p class="discover-text">SCRATCH TO<br>DISCOVER THE WEDDING DATE</p>
+
+            <div class="scratch-container">
+                <div class="scratch-card">
+                    <div class="scratch-base">
+                        <span class="scratch-date">16&nbsp; · &nbsp;DEC&nbsp; · &nbsp;2026</span>
+                    </div>
+                    <canvas class="scratch-canvas" width="420" height="120"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Save The Date & Countdown Section -->
+    <section class="venue-section">
+        <div class="venue-container scroll-animate">
+            <img src="assests/images/SAVE.png" class="save-image" alt="Save The Date">
+            
+            <div class="minimal-countdown" style="margin-bottom: 20px;">
+                <p class="countdown-title">Days to Go...</p>
+
+                <div class="timer" style="margin-top: 15px; gap: 20px;">
+                    <div class="time-block-minimal">
+                        <span id="days">00</span>
+                        <p>Days</p>
+                    </div>
+                    <div class="time-block-minimal">
+                        <span id="hours">00</span>
+                        <p>Hours</p>
+                    </div>
+                    <div class="time-block-minimal">
+                        <span id="minutes">00</span>
+                        <p>Minutes</p>
+                    </div>
+                    <div class="time-block-minimal">
+                        <span id="seconds">00</span>
+                        <p>Secs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events and Venues Section (Programme) -->
+    <section class="venue-section">
+        <div class="venue-container scroll-animate">
+            <h2 class="venue-title">Wedding Programme</h2>
+
+            <div class="event-venue-list">
+
+                <!-- Event 1: HALDI CEREMONY -->
+                <div class="event-venue-card">
+                    <div class="event-venue-content">
+                        <p class="event-venue-label">
+                            <strong style="font-size: 1.6em;">HALDI CEREMONY</strong>
+                        </p>
+                        <span class="qubool-text" style="font-size: 1.6em;">
+                            Rang &amp; Blessings
+                        </span>
+
+                        <div class="event-venue-divider"></div>
+
+                        <p class="event-venue-date">
+                            Monday, 14th December 2026
+                        </p>
+
+                        <div class="event-time-schedule">
+                            <p class="event-venue-time"><strong>Haldi:</strong> 6:00 PM</p>
+                            <p class="event-venue-time"><strong>Dinner:</strong> 7:00 PM</p>
+                        </div>
+
+                        <div class="event-venue-location">
+                            <strong>
+                                <div>
+                                    <p class="location-title">10 Angur House</p>
+                                    <p class="location-place">Golden Park, Taslim Soc Road, Vatva, Ahmedabad</p>
+                                </div>
+                            </strong>
+                        </div>
+
+                        <a href="https://maps.google.com/?q=Vatva+Ahmedabad" target="_blank" rel="noopener noreferrer" class="map-link">
+                            <iconify-icon icon="lucide:map-pin" class="location-icon"></iconify-icon>
+                            <span>Open In Google Maps</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Event 2: NIKAH CEREMONY (MAIN WEDDING) -->
+                <div class="event-venue-card highlight-card">
+                    <div class="event-venue-content">
+                        <p class="event-venue-label">
+                            <strong style="font-size: 1.65em;">NIKAH CEREMONY</strong>
+                        </p>
+                        <span class="qubool-text">
+                            Qubool Hai
+                        </span>
+                        <p class="event-venue-date" style="text-align: center; margin-top: 8px;">
+                            <strong>Insha Allah<br>Two souls united in love &amp; faith</strong>
+                        </p>
+
+                        <div class="event-venue-divider"></div>
+
+                        <p class="event-venue-date" style="font-size: 1.6rem; color: #7d0e0e;">
+                            Wednesday, 16th December 2026
+                        </p>
+
+                        <div class="event-time-schedule">
+                            <p class="event-venue-time"><strong>Arrival of Barat:</strong> 6:00 PM</p>
+                            <p class="event-venue-time"><strong>Dinner:</strong> 7:00 PM</p>
+                        </div>
+
+                        <div class="event-venue-location">
+                            <strong>
+                                <div>
+                                    <p class="location-title">Palm Green Club &amp; Resort</p>
+                                    <p class="location-place">NH. No. 08, Kheda Highway, Goblej, Gujarat</p>
+                                </div>
+                            </strong>
+                        </div>
+
+                        <a href="https://maps.google.com/?q=Palm+Green+Club+and+Resort+Goblej+Gujarat" target="_blank" rel="noopener noreferrer" class="map-link">
+                            <iconify-icon icon="lucide:map-pin" class="location-icon"></iconify-icon>
+                            <span>Open In Google Maps</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Dress Code Section with Interactive Scratch Card -->
+    <section class="venue-section">
+        <div class="venue-container scroll-animate">
+            <h2 class="venue-title">Dress Code</h2>
+
+            <div class="event-venue-content">
+                <div class="event-venue-divider"></div>
+
+                <div class="scratch-container dress-scratch-container">
+                    <div class="scratch-card dress-scratch-card">
+                        <div class="scratch-base dress-scratch-base">
+                            <p class="dress-scratch-message">
+                                <strong>Ethnic &amp; Elegant</strong><br>
+                                Wear what makes you feel joyful and comfortable.<br>
+                                Your warm presence and prayers are our greatest gift!
+                            </p>
+                        </div>
+                        <canvas class="scratch-canvas" width="420" height="200"></canvas>
+                    </div>
+                </div>
+
+                <div class="event-venue-divider" style="margin-top: 22px; margin-bottom: 0;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Family & R.S.V.P Section -->
+    <section class="venue-section">
+        <div class="venue-container scroll-animate">
+            <h2 class="venue-title" style="font-size: 1.7rem;">R. S. V. P.</h2>
+
+            <div class="family-grid-box">
+                <div class="family-sub-block">
+                    <p class="family-role-title">With Respectful Remembrance</p>
+                    <p class="family-member-name">Late Shamim Ahmed K.</p>
+                </div>
+
+                <div class="family-sub-block">
+                    <p class="family-role-title">Cordially Welcoming You</p>
+                    <div class="family-names-list">
+                        <span>Sadik Amin I</span>
+                        <span>Abu Bakar K.</span>
+                        <span>Mohd. Aarif</span>
+                        <span>Mohd. Shoaib S.</span>
+                        <span>Mohd. Arbaz A.</span>
+                        <span>Mohd Adnan A.</span>
+                        <span>Mohd. Alfez A.</span>
+                        <span>Hafiz Mohd. Sohem Z.</span>
+                    </div>
+                </div>
+
+                <div class="family-sub-block">
+                    <p class="family-role-title">:: Damad ::</p>
+                    <div class="family-names-list">
+                        <span>Mohd. Asim</span>
+                        <span>Mohd. Sajid</span>
+                        <span>Mohd. Sarhan</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact & Inquiries -->
+            <div class="contact-actions-box">
+                <p class="small-text" style="margin-bottom: 12px; font-weight: 600;">FOR INQUIRIES &amp; ASSISTANCE</p>
+                <div class="contact-buttons">
+                    <a href="tel:+919824048963" class="contact-btn">
+                        <iconify-icon icon="lucide:phone-call"></iconify-icon>
+                        98240 48963
+                    </a>
+                    <a href="tel:+919227868786" class="contact-btn">
+                        <iconify-icon icon="lucide:phone-call"></iconify-icon>
+                        92278 68786
+                    </a>
+                    <a href="https://wa.me/919824048963?text=Congratulations%20Dr.%20Misba%20%26%20Zubair!" target="_blank" rel="noopener noreferrer" class="contact-btn whatsapp">
+                        <iconify-icon icon="logos:whatsapp-icon"></iconify-icon>
+                        WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Will You Attend (RSVP) -->
+    <section class="rsvp-section">
+        <div class="venue-container scroll-animate">
+            <h2 class="rsvp-title">Will You Attend?</h2>
+            <p class="rsvp-sub">Please let us know if you will grace the celebration</p>
+            
+            <div class="rsvp-buttons">
+                <button id="yesBtn" class="rsvp-btn yes">Yes, Joyfully Accepting 🎉</button>
+                <button id="noBtn" class="rsvp-btn no">Regretfully Declining</button>
+            </div>
+            
+            <p id="rsvpMessage" class="rsvp-message"></p>
+        </div>
+    </section>
+
+    <!-- Compliments & Blessings -->
+    <p class="event-venue-date" style="text-align: center; font-size: 1.1em; margin-top: 40px; letter-spacing: 2px;">
+        WITH BEST COMPLIMENTS
+    </p>
+
+    <p class="event-venue-time" style="text-align: center; font-size: 1.5em; margin-top: 8px;">
+        <strong>Angur Family</strong>
+    </p>
+    <p class="small-text" style="text-align: center; letter-spacing: 2px; opacity: 0.85; margin-bottom: 30px;">
+        &amp; ALL RELATIVES &amp; FRIENDS
+    </p>
+
+    <!-- Thank You Section -->
+    <section class="thankyou-section">
+        <p class="event-venue-date" style="text-align: center;">
+            <strong>Awaiting your gracious presence</strong>
+        </p>
+        <div class="thankyou-container scroll-animate">
+            <br>
+            <img src="assests/images/insha.png" class="insha-image" alt="Insha Allah Calligraphy">
+            <img src="assests/images/bl-fl.png" alt="Floral Decoration" class="bl" style="margin: 0 auto;">
+        </div>
+    </section>
+
+    <!-- Footer Corporate Reference -->
+    <div class="branding-bar">
+        <p style="font-size: 0.72rem; letter-spacing: 1.2px; text-transform: uppercase; opacity: 0.75; margin-bottom: 6px;">
+            ANGUR FOODS PVT. LTD. · AHMEDABAD
+        </p>
+        <a href="#" class="branding-link">
+            Created with love &amp; blessings
+        </a>
+    </div>
+
+    <!-- JavaScript Script -->
+    <script src="script.js"></script>
+</body>
+</html>
