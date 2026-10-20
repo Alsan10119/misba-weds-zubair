@@ -3,6 +3,7 @@ server.exe
 Server.cs
 server.ps1
 start_server.bat
+push_to_github.bat
 *.log
 *.txt
 *.ps1

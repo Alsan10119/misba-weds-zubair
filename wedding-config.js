@@ -89,7 +89,7 @@ const WEDDING_CONFIG = {
   events: [
     {
       id: "nikah",
-      title: "NIKAH CEREMONY & RECEPTION",
+      title: "NIKAH CEREMONY",
       subtitle: "Insha Allah · Two Souls United in Love & Faith · Qubool Hai",
       dateText: "Wednesday, 16th December 2026",
       calendarDate: "2026-12-16",
@@ -99,7 +99,7 @@ const WEDDING_CONFIG = {
       schedule: [
         { label: "Arrival of Barat", time: "6:00 PM" },
         { label: "Nikah Ceremony", time: "6:30 PM" },
-        { label: "Dinner & Reception", time: "7:00 PM Onwards" }
+        { label: "Dinner", time: "7:00 PM Onwards" }
       ],
       venue: "Palm Green Club & Resort",
       address: "NH. No. 08, Kheda Highway, Goblej, Gujarat",

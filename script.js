@@ -534,8 +534,8 @@ function addToGoogleCalendar(eventId) {
         // 20261214T123000Z to 20261214T163000Z (18:00 - 22:00 IST)
         dates = "20261214T123000Z/20261214T163000Z";
     } else {
-        title = encodeURIComponent("Nikah Ceremony & Reception — Dr. Misba & Zubair");
-        details = encodeURIComponent("Nikah Ceremony & Wedding Programme. Arrival of Barat at 6:00 PM, Dinner & Reception at 7:00 PM. Hosted by Angur Family.");
+        title = encodeURIComponent("Nikah Ceremony — Dr. Misba & Zubair");
+        details = encodeURIComponent("Nikah Ceremony & Wedding Programme. Arrival of Barat at 6:00 PM, Dinner at 7:00 PM. Hosted by Angur Family.");
         location = encodeURIComponent("Palm Green Club & Resort, NH. No. 08, Kheda Highway, Goblej, Gujarat");
         // 20261216T123000Z to 20261216T180000Z (18:00 - 23:30 IST)
         dates = "20261216T123000Z/20261216T180000Z";
