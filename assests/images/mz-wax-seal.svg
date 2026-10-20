@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <!-- Wax Seal 3D Red Carmine Radial Gradient -->
+    <radialGradient id="waxBase" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#931523"/>
+      <stop offset="35%" stop-color="#730d19"/>
+      <stop offset="70%" stop-color="#50060f"/>
+      <stop offset="100%" stop-color="#2a0206"/>
+    </radialGradient>
+
+    <!-- Deep Wax Impression Shadow -->
+    <radialGradient id="waxIndent" cx="45%" cy="40%" r="55%">
+      <stop offset="75%" stop-color="#46050d"/>
+      <stop offset="92%" stop-color="#340308"/>
+      <stop offset="100%" stop-color="#7a0f1c"/>
+    </radialGradient>
+
+    <!-- Metallic Gold Foil Inlay Gradient -->
+    <linearGradient id="sealGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff8db"/>
+      <stop offset="25%" stop-color="#e2bf5b"/>
+      <stop offset="50%" stop-color="#b68925"/>
+      <stop offset="75%" stop-color="#ffd966"/>
+      <stop offset="100%" stop-color="#805b10"/>
+    </linearGradient>
+
+    <filter id="waxGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000" flood-opacity="0.6"/>
+    </filter>
+
+    <filter id="goldEmboss" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+
+    <!-- Single Acanthus Scroll for 16-point symmetry -->
+    <g id="sealAcanthus">
+      <path d="M 0,-185 C 10,-190 24,-198 30,-212 C 33,-218 26,-222 20,-216 C 14,-210 10,-200 0,-195 C -10,-200 -14,-210 -20,-216 C -26,-222 -33,-218 -30,-212 C -24,-198 -10,-190 0,-185 Z" fill="url(#sealGold)"/>
+      <circle cx="0" cy="-185" r="4" fill="url(#sealGold)"/>
+    </g>
+  </defs>
+
+  <g transform="translate(300, 300)" filter="url(#waxGlow)">
+    
+    <!-- Organic Hand-Poured Wax Seal Outer Edge with Irregular Lobe Contour -->
+    <path d="
+      M 0,-270 
+      C 45,-272 90,-262 130,-240 
+      C 175,-215 210,-185 240,-140 
+      C 268,-95 276,-45 274,5 
+      C 272,55 258,105 232,150 
+      C 200,202 160,242 110,262 
+      C 60,282 5,280 -45,274 
+      C -100,266 -150,242 -190,205 
+      C -235,162 -265,115 -272,60 
+      C -278,5 -270,-55 -246,-105 
+      C -220,-160 -182,-208 -135,-240 
+      C -95,-262 -50,-268 0,-270 Z
+    " fill="url(#waxBase)" stroke="#88121f" stroke-width="4"/>
+
+    <!-- Inner Wax Ridge Rim -->
+    <circle cx="0" cy="0" r="230" fill="none" stroke="rgba(255, 255, 255, 0.15)" stroke-width="4"/>
+    <circle cx="0" cy="0" r="226" fill="none" stroke="#240205" stroke-width="6"/>
+
+    <!-- Wax Seal Indentation Basin -->
+    <circle cx="0" cy="0" r="220" fill="url(#waxIndent)"/>
+
+    <!-- Exact 16-Point Baroque Acanthus Wreath in Gleaming Gold -->
+    <g id="sealWreath" filter="url(#goldEmboss)">
+      <use href="#sealAcanthus" transform="rotate(0)"/>
+      <use href="#sealAcanthus" transform="rotate(22.5) scale(0.9)"/>
+      <use href="#sealAcanthus" transform="rotate(45)"/>
+      <use href="#sealAcanthus" transform="rotate(67.5) scale(0.9)"/>
+      <use href="#sealAcanthus" transform="rotate(90)"/>
+      <use href="#sealAcanthus" transform="rotate(112.5) scale(0.9)"/>
+      <use href="#sealAcanthus" transform="rotate(135)"/>
+      <use href="#sealAcanthus" transform="rotate(157.5) scale(0.9)"/>
+      <use href="#sealAcanthus" transform="rotate(180)"/>
+      <use href="#sealAcanthus" transform="rotate(202.5) scale(0.9)"/>
+      <use href="#sealAcanthus" transform="rotate(225)"/>
+      <use href="#sealAcanthus" transform="rotate(247.5) scale(0.9)"/>
+      <use href="#sealAcanthus" transform="rotate(270)"/>
+      <use href="#sealAcanthus" transform="rotate(292.5) scale(0.9)"/>
+      <use href="#sealAcanthus" transform="rotate(315)"/>
+      <use href="#sealAcanthus" transform="rotate(337.5) scale(0.9)"/>
+
+      <!-- Top Crown Palmette -->
+      <path d="M 0,-240 C 10,-225 22,-215 30,-200 C 34,-192 26,-186 20,-190 C 12,-196 6,-208 0,-218 C -6,-208 -12,-196 -20,-190 C -26,-186 -34,-192 -30,-200 C -22,-215 -10,-225 0,-240 Z" fill="url(#sealGold)"/>
+      <circle cx="0" cy="-244" r="5" fill="url(#sealGold)"/>
+
+      <!-- Bottom Palmette Flourish -->
+      <path d="M 0,240 C 10,225 22,215 30,200 C 34,192 26,186 20,190 C 12,196 6,208 0,218 C -6,208 -12,196 -20,190 C -26,186 -34,192 -30,200 C -22,215 -10,225 0,240 Z" fill="url(#sealGold)"/>
+      <circle cx="0,244" r="5" fill="url(#sealGold)"/>
+
+      <!-- Double Gold Bezel Frame -->
+      <circle cx="0" cy="0" r="176" fill="none" stroke="url(#sealGold)" stroke-width="6"/>
+      <circle cx="0" cy="0" r="168" fill="none" stroke="#240205" stroke-width="2"/>
+      <circle cx="0" cy="0" r="164" fill="none" stroke="url(#sealGold)" stroke-width="3"/>
+      <circle cx="0" cy="0" r="158" fill="none" stroke="url(#sealGold)" stroke-width="1.5" stroke-dasharray="3 4"/>
+    </g>
+
+    <!-- Stamped Gold Monogram M and Z (Exact Script Matching Reference) -->
+    <g filter="url(#goldEmboss)">
+      <!-- Master M Script Path in Gold Foil -->
+      <path d="
+        M -110,-5 C -136,-5 -155,-22 -155,-46 C -155,-69 -134,-85 -107,-85 C -84,-85 -69,-69 -67,-51 C -65,-37 -76,-25 -90,-25 C -101,-25 -108,-32 -108,-41 C -108,-46 -103,-51 -97,-51 C -94,-51 -90,-48 -90,-44 C -90,-41 -94,-37 -97,-37 C -99,-37 -101,-39 -101,-41 C -101,-43 -97,-46 -94,-46 C -90,-46 -87,-41 -87,-34 C -87,-25 -96,-16 -110,-16 C -131,-16 -145,-30 -145,-48 C -145,-65 -127,-80 -106,-80 C -85,-80 -71,-65 -65,-46 L -28,26 C -25,33 -20,39 -12,39 C -3,39 4,30 9,16 L 42,-55 C 48,-65 55,-72 64,-72 C 73,-72 76,-63 71,-49 L 44,16 C 39,30 35,42 41,46 C 44,50 53,44 62,32 L 67,37 C 55,53 41,60 30,60 C 18,60 12,48 18,30 L 41,-32 L 14,21 C 7,35 -2,46 -12,46 C -23,46 -28,35 -25,23 L 4,-42 L -39,42 C -46,56 -57,65 -69,65 C -80,65 -85,55 -81,42 L -60,-12 C -69,-4 -80,4 -92,4 C -101,4 -108,0 -110,-5 Z
+      " fill="url(#sealGold)"/>
+
+      <!-- Master Z Script Path in Gold Foil -->
+      <path d="
+        M -7,-14 
+        C 2,-25 16,-34 34,-37 
+        C 55,-41 78,-35 91,-23 
+        C 98,-16 100,-7 94,0 
+        C 87,9 73,16 57,25 
+        L -5,64 
+        C -14,69 -18,76 -14,83 
+        C -9,92 7,96 27,94 
+        C 50,92 75,82 96,67 
+        L 100,74 
+        C 75,92 46,105 21,105 
+        C -5,105 -23,96 -23,78 
+        C -23,64 -12,53 4,43 
+        L 59,11 
+        C 71,4 80,-3 82,-10 
+        C 84,-17 77,-23 64,-25 
+        C 48,-27 30,-21 14,-12 
+        C 5,-7 -2,-3 -7,-14 Z
+      " fill="url(#sealGold)"/>
+      <path d="
+        M 16,87 
+        C -3,87 -18,76 -18,64 
+        C -18,53 -9,44 5,35 
+        L 57,4 
+        C 68,-3 76,-10 78,-16 
+        C 80,-21 73,-26 62,-26 
+        C 46,-26 27,-19 12,-9 
+        L 7,-16 
+        C 25,-28 46,-35 66,-35 
+        C 84,-35 94,-26 92,-14 
+        C 91,-2 78,7 64,16 
+        L 4,53 
+        C -5,58 -9,65 -7,71 
+        C -4,78 9,82 25,80 
+        C 46,78 69,67 87,55 
+        L 92,62 
+        C 71,78 45,89 21,89 
+        C 19,89 18,88 16,87 Z
+      " fill="url(#sealGold)"/>
+    </g>
+
+  </g>
+</svg>

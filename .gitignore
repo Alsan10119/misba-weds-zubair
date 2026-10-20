@@ -1,12 +1,12 @@
-# Ignore large binary assets - upload manually or via Git LFS
-assests/videos/
-assests/audio/
-assests/images/bg.png
-assests/images/first.png
-assests/images/light.png
-assests/images/SAVE.png
-assests/images/topf.png
-assests/images/cover1.png
-
-# Helper scripts
-download.ps1
+# Local server and helper scripts
+server.exe
+Server.cs
+server.ps1
+start_server.bat
+*.log
+*.txt
+*.ps1
+debug_*.html
+ref_*.js
+ref_*.css
+frame_*.png

@@ -1,57 +1,79 @@
+/**
+ * ====================================================================
+ * LUXURY WEDDING INVITATION — INTERACTIVE ENGINE
+ * Dr. Misba & Zubair · 16th December 2026
+ * ====================================================================
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
-    const video = document.getElementById('curtainVideo');
-    const playOverlay = document.getElementById('playOverlay');
+
+    // Global Elements
     const heroSection = document.getElementById('heroSection');
+    const safarText = document.getElementById('safarText');
     const music = document.getElementById('bgMusic');
     const musicToggle = document.getElementById('musicToggle');
-    const musicIcon = document.getElementById('musicIcon');
-    const safarText = document.getElementById('safarText');
+    const scrollDownTrigger = document.getElementById('scrollDownTrigger');
+    const toastNotification = document.getElementById('toastNotification');
 
     let isMusicPlaying = false;
     let shouldResumeAfterFocus = false;
+    let hasEnvelopeOpened = false;
 
     // Set gentle background music volume
     if (music) {
-        music.volume = 0.35;
+        music.volume = (window.WEDDING_CONFIG && window.WEDDING_CONFIG.audio) ? window.WEDDING_CONFIG.audio.defaultVolume : 0.35;
     }
 
-    // Music helper functions
-    function setMusicButtonIcon(playing) {
-        if (musicIcon) {
-            musicIcon.setAttribute('icon', playing ? 'lucide:volume-2' : 'lucide:volume-x');
+    // ====================================================================
+    // 1. BACKGROUND MUSIC CONTROLLER
+    // ====================================================================
+    function updateMusicButtonUI(playing) {
+        if (!musicToggle) return;
+        if (playing) {
+            musicToggle.classList.add('playing');
+            musicToggle.setAttribute('title', 'Pause Music');
+        } else {
+            musicToggle.classList.remove('playing');
+            musicToggle.setAttribute('title', 'Play Music');
         }
     }
 
-    function startMusic() {
+    function playMusic() {
         if (!music) return;
-        music.play().then(() => {
-            isMusicPlaying = true;
-            setMusicButtonIcon(true);
-        }).catch(() => {
-            isMusicPlaying = false;
-            setMusicButtonIcon(false);
-        });
+        const playPromise = music.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                isMusicPlaying = true;
+                updateMusicButtonUI(true);
+            }).catch(err => {
+                console.warn("Autoplay was prevented by browser policy:", err);
+                isMusicPlaying = false;
+                updateMusicButtonUI(false);
+            });
+        }
     }
 
     function pauseMusic() {
         if (!music || music.paused) return;
         music.pause();
         isMusicPlaying = false;
-        setMusicButtonIcon(false);
+        updateMusicButtonUI(false);
     }
 
-    // Music toggle button
     if (musicToggle) {
-        musicToggle.addEventListener('click', () => {
+        musicToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
             if (isMusicPlaying) {
                 pauseMusic();
+                showToast("Music paused");
             } else {
-                startMusic();
+                playMusic();
+                showToast("Music playing");
             }
         });
     }
 
-    // Handle tab visibility change for audio
+    // Tab visibility handling (pause on tab switch, resume on focus)
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             if (music && !music.paused && isMusicPlaying) {
@@ -60,350 +82,709 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else if (shouldResumeAfterFocus) {
             shouldResumeAfterFocus = false;
-            startMusic();
+            playMusic();
         }
     });
 
-    // Opening Curtain / Video Trigger
-    if (playOverlay) {
-        playOverlay.addEventListener('click', async () => {
-            const poster = document.getElementById('videoPoster');
-            if (poster) {
-                poster.style.opacity = '0';
-                poster.style.transition = 'opacity 0.6s ease';
-                setTimeout(() => {
-                    poster.style.display = 'none';
-                }, 600);
-            }
+    // ====================================================================
+    // 2. HERO VIDEO & ENVELOPE OPENING (Exact Match to Reference Site)
+    // ====================================================================
+    const curtainVideo = document.getElementById('curtainVideo');
+    const playOverlay = document.getElementById('playOverlay');
+    const videoPoster = document.getElementById('videoPoster');
+    const videoSealOverlay = document.getElementById('videoSealOverlay');
 
+    async function triggerEnvelopeOpen() {
+        if (hasEnvelopeOpened) return;
+        hasEnvelopeOpened = true;
+
+        // Start background music immediately
+        playMusic();
+
+        // 1. Fade out the video poster and tap overlay
+        if (videoPoster) {
+            videoPoster.style.opacity = '0';
+            videoPoster.style.transition = 'opacity 0.4s ease';
+            setTimeout(() => {
+                videoPoster.style.display = 'none';
+            }, 400);
+        }
+
+        if (playOverlay) {
             playOverlay.style.opacity = '0';
             playOverlay.style.pointerEvents = 'none';
-
-            if (safarText) {
-                safarText.classList.add('show');
-            }
-
             setTimeout(() => {
                 playOverlay.style.display = 'none';
-            }, 600);
+            }, 500);
+        }
 
-            if (video) {
-                try {
-                    await video.play();
-                } catch (error) {
-                    console.warn("Video playback was interrupted or restricted:", error);
-                }
+        // 2. Show the "A Beautiful Safar Unfolds..." cursive text
+        if (safarText) {
+            safarText.classList.add('show');
+        }
+
+        // 3. Play the envelope opening video
+        if (curtainVideo) {
+            try {
+                await curtainVideo.play();
+            } catch (err) {
+                console.warn("Video playback error:", err);
             }
+        }
 
-            startMusic();
+        // 4. Smoothly lift the MZ seal overlay as flap unfolds open in video (~320ms)
+        setTimeout(() => {
+            if (videoSealOverlay) {
+                videoSealOverlay.classList.add('opened');
+            }
+        }, 320);
+
+        // Confetti celebratory burst
+        if (typeof confetti === 'function') {
+            try {
+                confetti({
+                    particleCount: 50,
+                    spread: 60,
+                    origin: { y: 0.7 },
+                    colors: ['#c59b27', '#f1df9c', '#7e121e', '#ffffff']
+                });
+            } catch (e) {}
+        }
+
+        // Safety fallback timer if video ended event is delayed on mobile
+        setTimeout(() => {
+            dismissHeroSection();
+        }, 3200);
+    }
+
+    if (playOverlay) {
+        playOverlay.addEventListener('click', triggerEnvelopeOpen);
+        playOverlay.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            triggerEnvelopeOpen();
+        }, { passive: false });
+    }
+
+    if (curtainVideo) {
+        curtainVideo.addEventListener('timeupdate', () => {
+            if (curtainVideo.currentTime > 0.3 && videoSealOverlay && !videoSealOverlay.classList.contains('opened')) {
+                videoSealOverlay.classList.add('opened');
+            }
+        });
+
+        curtainVideo.addEventListener('ended', () => {
+            dismissHeroSection();
         });
     }
 
-    // When opening curtain video ends, unlock scroll & fade hero
-    if (video) {
-        video.addEventListener('ended', () => {
-            if (heroSection) {
-                heroSection.style.opacity = '0';
-                heroSection.style.visibility = 'hidden';
+    let hasDismissed = false;
+    function dismissHeroSection() {
+        if (!heroSection || hasDismissed) return;
+        hasDismissed = true;
+        heroSection.style.opacity = '0';
+        heroSection.style.visibility = 'hidden';
+        heroSection.style.transition = 'opacity 1.5s ease-in-out, visibility 1.5s ease-in-out';
 
-                setTimeout(() => {
-                    heroSection.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                    window.scrollTo(0, 0);
-                }, 1500);
-            } else {
-                document.body.style.overflow = 'auto';
+        setTimeout(() => {
+            heroSection.style.display = 'none';
+            document.body.style.overflowY = 'auto';
+            document.body.style.overflow = 'auto';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 1500);
+    }
+
+
+    // Smooth Scroll Down Indicator
+    if (scrollDownTrigger) {
+        scrollDownTrigger.addEventListener('click', () => {
+            const nextSection = document.getElementById('scratchSection') || document.getElementById('eventsSection');
+            if (nextSection) {
+                nextSection.scrollIntoView({ behavior: 'smooth' });
             }
         });
     }
 
-    // Fallback if video is clicked or cannot play
-    if (heroSection) {
-        heroSection.addEventListener('dblclick', () => {
-            heroSection.style.opacity = '0';
-            setTimeout(() => {
-                heroSection.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }, 600);
-        });
-    }
-
-    // Scroll reveal animations
-    const observer = new IntersectionObserver((entries) => {
+    // ====================================================================
+    // 3. SCROLL REVEAL ANIMATIONS (Intersection Observer)
+    // ====================================================================
+    const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
             }
         });
     }, {
-        threshold: 0.15
+        threshold: 0.12,
+        rootMargin: "0px 0px -40px 0px"
     });
 
-    document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
+    document.querySelectorAll('.scroll-animate').forEach(el => revealObserver.observe(el));
 
-    // Initialize Scratch Cards
-    setupScratchCards();
+    // ====================================================================
+    // 4. INTERACTIVE SCRATCH CARD (DATE REVEAL)
+    // ====================================================================
+    setupScratchCard();
 
-    // Initialize Countdown Timer for Dec 16, 2026
-    setupCountdown();
+    // ====================================================================
+    // 5. LIVE COUNTDOWN TIMER (16 DEC 2026 · ASIA/KOLKATA)
+    // ====================================================================
+    setupCountdownTimer();
 
-    // Initialize RSVP
-    setupRSVP();
+    // ====================================================================
+    // 6. AMBIENT PETALS & GOLD SPARKLES CANVAS
+    // ====================================================================
+    setupAmbientPetals();
+
+    // ====================================================================
+    // 7. QUICK SHARE & RSVPS
+    // ====================================================================
+    const quickShareBtn = document.getElementById('quickShareBtn');
+    if (quickShareBtn) {
+        quickShareBtn.addEventListener('click', shareOnWhatsApp);
+    }
 });
 
-// Setup Interactive Metallic Scratch Cards
-function setupScratchCards() {
-    const canvases = document.querySelectorAll('.scratch-canvas');
+/**
+ * ====================================================================
+ * SCRATCH CARD ENGINE (Canvas Touch + Mouse)
+ * ====================================================================
+ */
+function setupScratchCard() {
+    const canvas = document.getElementById('scratchCanvas');
+    const instantRevealBtn = document.getElementById('instantRevealBtn');
+    const celebrationText = document.getElementById('scratchCelebrationText');
+    if (!canvas) return;
 
-    canvases.forEach(canvas => {
-        const ctx = canvas.getContext('2d', { willReadFrequently: true });
-        let isDrawing = false;
-        let isCompleted = false;
-        let lastX = 0;
-        let lastY = 0;
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+    let isRevealed = false;
+    let totalPixels = 0;
 
-        // Apply Gold / Burgundy Metallic Conic Texture
-        const cx = canvas.width / 2;
-        const cy = canvas.height / 2;
-        let gradient;
+    function initCanvas() {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width || 380;
+        canvas.height = rect.height || 150;
+        totalPixels = canvas.width * canvas.height;
 
-        if (ctx.createConicGradient) {
-            gradient = ctx.createConicGradient(0, cx, cy);
-            gradient.addColorStop(0, "#610B14");
-            gradient.addColorStop(0.15, "#efe3cf");
-            gradient.addColorStop(0.3, "#b49a72");
-            gradient.addColorStop(0.5, "#610B14");
-            gradient.addColorStop(0.65, "#fff5df");
-            gradient.addColorStop(0.8, "#d2c1a5");
-            gradient.addColorStop(1, "#610B14");
-        } else {
-            gradient = ctx.createRadialGradient(cx, cy, 10, cx, cy, cx);
-            gradient.addColorStop(0, "#efe3cf");
-            gradient.addColorStop(0.5, "#b49a72");
-            gradient.addColorStop(1, "#610B14");
-        }
+        // Draw Metallic Gold / Burgundy Foil Coating
+        const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        grad.addColorStop(0, '#5a0a12');
+        grad.addColorStop(0.35, '#911b27');
+        grad.addColorStop(0.65, '#c59b27');
+        grad.addColorStop(1, '#610b14');
 
-        ctx.fillStyle = gradient;
+        ctx.fillStyle = grad;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Subtle glitter noise
-        ctx.fillStyle = "rgba(255,255,255,0.06)";
-        for (let i = 0; i < 300; i++) {
-            ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 1, 1);
-        }
-
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.lineJoin = 'round';
-        ctx.lineCap = 'round';
-        ctx.lineWidth = 26;
-
-        function getMousePos(e) {
-            const rect = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
-
-            let clientX = e.clientX;
-            let clientY = e.clientY;
-
-            if (e.touches && e.touches.length > 0) {
-                clientX = e.touches[0].clientX;
-                clientY = e.touches[0].clientY;
-            } else if (e.changedTouches && e.changedTouches.length > 0) {
-                clientX = e.changedTouches[0].clientX;
-                clientY = e.changedTouches[0].clientY;
-            }
-
-            return {
-                x: (clientX - rect.left) * scaleX,
-                y: (clientY - rect.top) * scaleY
-            };
-        }
-
-        function scratch(e) {
-            if (!isDrawing || isCompleted) return;
-            e.preventDefault();
-
-            const pos = getMousePos(e);
+        // Add subtle gold shimmer specks
+        ctx.fillStyle = 'rgba(255, 235, 170, 0.45)';
+        for (let i = 0; i < 90; i++) {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            const r = Math.random() * 2 + 1;
             ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
-            ctx.lineTo(pos.x, pos.y);
-            ctx.stroke();
-
-            lastX = pos.x;
-            lastY = pos.y;
-
-            checkCompletion();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fill();
         }
 
-        canvas.addEventListener('mousedown', (e) => {
-            isDrawing = true;
-            const pos = getMousePos(e);
-            lastX = pos.x;
-            lastY = pos.y;
-        });
+        // Add instruction text on the scratch surface
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 13px Cinzel, Montserrat, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('✦ SCRATCH HERE TO REVEAL DATE ✦', canvas.width / 2, canvas.height / 2);
+    }
 
-        canvas.addEventListener('mousemove', scratch);
-        window.addEventListener('mouseup', () => { isDrawing = false; });
+    // Call after fonts load or brief delay
+    setTimeout(initCanvas, 150);
+    window.addEventListener('resize', () => {
+        if (!isRevealed) initCanvas();
+    });
 
-        canvas.addEventListener('touchstart', (e) => {
-            isDrawing = true;
-            const pos = getMousePos(e);
-            lastX = pos.x;
-            lastY = pos.y;
-        }, { passive: false });
+    function getPosition(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+            x: clientX - rect.left,
+            y: clientY - rect.top
+        };
+    }
 
-        canvas.addEventListener('touchmove', scratch, { passive: false });
-        window.addEventListener('touchend', () => { isDrawing = false; });
+    function scratch(e) {
+        if (!isDrawing || isRevealed) return;
+        const pos = getPosition(e);
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, 22, 0, Math.PI * 2);
+        ctx.fill();
+        checkScratchPercentage();
+    }
 
-        function checkCompletion() {
-            if (isCompleted) return;
-
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            let transparentPixels = 0;
-            const totalPixels = imageData.data.length / 4;
-
-            for (let i = 3; i < imageData.data.length; i += 16) {
-                if (imageData.data[i] < 50) {
-                    transparentPixels++;
+    function checkScratchPercentage() {
+        if (isRevealed) return;
+        try {
+            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            let clearedCount = 0;
+            // Sample every 16th pixel for high performance
+            for (let i = 3; i < imgData.data.length; i += 16) {
+                if (imgData.data[i] === 0) {
+                    clearedCount++;
                 }
             }
+            const sampleTotal = totalPixels / 4;
+            const percentage = (clearedCount / sampleTotal) * 100;
 
-            const ratio = transparentPixels / (totalPixels / 4);
-            if (ratio > 0.08) { // Once 8% is scratched, reveal smoothly
-                isCompleted = true;
-                canvas.style.transition = 'opacity 0.4s ease';
-                canvas.style.opacity = '0';
-
-                const base = canvas.parentElement.querySelector('.scratch-base');
-                if (base) base.classList.add('scratched-pop');
-
-                setTimeout(() => {
-                    canvas.style.display = 'none';
-                }, 400);
-
-                triggerConfetti(canvas);
+            if (percentage > 38) {
+                revealEntireDate();
             }
+        } catch (err) {
+            // Fallback for security restriction
         }
+    }
+
+    function revealEntireDate() {
+        if (isRevealed) return;
+        isRevealed = true;
+        canvas.style.transition = 'opacity 0.6s ease';
+        canvas.style.opacity = '0';
+        setTimeout(() => {
+            canvas.style.display = 'none';
+        }, 600);
+
+        if (celebrationText) {
+            celebrationText.style.display = 'block';
+        }
+
+        triggerConfetti(0.6);
+        showToast("Wedding Date Revealed: 16th December 2026!");
+    }
+
+    // Mouse Listeners
+    canvas.addEventListener('mousedown', (e) => {
+        isDrawing = true;
+        scratch(e);
     });
+    window.addEventListener('mousemove', (e) => {
+        if (isDrawing) scratch(e);
+    });
+    window.addEventListener('mouseup', () => {
+        isDrawing = false;
+    });
+
+    // Touch Listeners
+    canvas.addEventListener('touchstart', (e) => {
+        isDrawing = true;
+        scratch(e);
+    }, { passive: true });
+    canvas.addEventListener('touchmove', (e) => {
+        if (isDrawing) scratch(e);
+    }, { passive: true });
+    canvas.addEventListener('touchend', () => {
+        isDrawing = false;
+    });
+
+    // Instant Accessible Reveal Button
+    if (instantRevealBtn) {
+        instantRevealBtn.addEventListener('click', revealEntireDate);
+    }
 }
 
-// Celebration Confetti
-function triggerConfetti(element) {
-    let originY = 0.5;
-    let originX = 0.5;
+/**
+ * ====================================================================
+ * LIVE WEDDING COUNTDOWN TIMER (Asia/Kolkata)
+ * Target: 16th December 2026, 6:00 PM IST
+ * ====================================================================
+ */
+function setupCountdownTimer() {
+    const daysEl = document.getElementById('daysCount');
+    const hoursEl = document.getElementById('hoursCount');
+    const minutesEl = document.getElementById('minutesCount');
+    const secondsEl = document.getElementById('secondsCount');
+    const statusEl = document.getElementById('countdownStatusText');
+    if (!daysEl) return;
 
-    if (element) {
-        const rect = element.getBoundingClientRect();
-        originY = (rect.top + rect.height / 2) / window.innerHeight;
-        originX = (rect.left + rect.width / 2) / window.innerWidth;
-    }
+    // Wedding Target: 2026-12-16T18:00:00+05:30
+    const targetDate = new Date("2026-12-16T18:00:00+05:30").getTime();
 
-    if (typeof confetti === 'function') {
-        confetti({
-            particleCount: 130,
-            spread: 110,
-            origin: { x: originX, y: originY },
-            colors: ['#610B14', '#b49a72', '#efe3cf', '#8a1320', '#f4e0c3'],
-            shapes: ['circle', 'square'],
-            scalar: 1.15,
-            zIndex: 9999
-        });
-    }
-}
-
-// Countdown Timer for Nikah Ceremony (December 16, 2026 18:00:00)
-function setupCountdown() {
-    const countdownDate = new Date("December 16, 2026 18:00:00").getTime();
-
-    const dEl = document.getElementById("days");
-    const hEl = document.getElementById("hours");
-    const mEl = document.getElementById("minutes");
-    const sEl = document.getElementById("seconds");
-
-    function update() {
+    function updateCountdown() {
         const now = new Date().getTime();
-        const distance = countdownDate - now;
+        const distance = targetDate - now;
 
-        if (distance < 0) {
-            if (dEl) dEl.innerText = "00";
-            if (hEl) hEl.innerText = "00";
-            if (mEl) mEl.innerText = "00";
-            if (sEl) sEl.innerText = "00";
+        if (distance <= 0) {
+            daysEl.innerText = "00";
+            hoursEl.innerText = "00";
+            minutesEl.innerText = "00";
+            secondsEl.innerText = "00";
+            if (statusEl) {
+                statusEl.innerText = "Alhamdulillah! The auspicious celebrations have begun! 🎉";
+            }
             return;
         }
 
-        let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        if (dEl) dEl.innerText = days < 10 ? '0' + days : days;
-        if (hEl) hEl.innerText = hours < 10 ? '0' + hours : hours;
-        if (mEl) mEl.innerText = minutes < 10 ? '0' + minutes : minutes;
-        if (sEl) sEl.innerText = seconds < 10 ? '0' + seconds : seconds;
+        daysEl.innerText = String(days).padStart(2, '0');
+        hoursEl.innerText = String(hours).padStart(2, '0');
+        minutesEl.innerText = String(minutes).padStart(2, '0');
+        secondsEl.innerText = String(seconds).padStart(2, '0');
     }
 
-    update();
-    setInterval(update, 1000);
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
 }
 
-// RSVP Interaction
-function setupRSVP() {
-    const yesBtn = document.getElementById('yesBtn');
-    const noBtn = document.getElementById('noBtn');
-    const message = document.getElementById('rsvpMessage');
-
-    if (yesBtn && message) {
-        yesBtn.addEventListener('click', (e) => {
-            message.innerText = "Alhamdulillah! Can't wait to celebrate with you 🎉";
-            message.style.opacity = '1';
-
-            yesBtn.classList.add('happy');
-            setTimeout(() => yesBtn.classList.remove('happy'), 600);
-
-            triggerConfetti(yesBtn);
-        });
-    }
-
-    if (noBtn && message) {
-        noBtn.addEventListener('click', () => {
-            message.innerText = "You will be dearly missed & remembered in our prayers ❤️";
-            message.style.opacity = '1';
-
-            noBtn.classList.add('sad');
-            setTimeout(() => noBtn.classList.remove('sad'), 500);
+/**
+ * ====================================================================
+ * CELEBRATORY CONFETTI & FLOWER SHOWER
+ * ====================================================================
+ */
+function triggerConfetti(yOrigin = 0.5) {
+    if (typeof confetti === 'function') {
+        confetti({
+            particleCount: 75,
+            spread: 70,
+            origin: { y: yOrigin },
+            colors: ['#c59b27', '#f1df9c', '#7e121e', '#e8dfcd', '#ffffff']
         });
     }
 }
 
-// Floating Heart Trail on Cursor / Touch
-let lastHeartTime = 0;
-function createHeart(e) {
-    const now = Date.now();
-    if (now - lastHeartTime < 180) return;
-    lastHeartTime = now;
+/**
+ * ====================================================================
+ * AMBIENT FLOATING PETALS & PARTICLES
+ * ====================================================================
+ */
+function setupAmbientPetals() {
+    const canvas = document.getElementById('ambientPetalsCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
 
-    let x = e.clientX;
-    let y = e.clientY;
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
 
-    if (e.touches && e.touches.length > 0) {
-        x = e.touches[0].clientX;
-        y = e.touches[0].clientY;
+    window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    });
+
+    const particles = [];
+    const particleCount = 20;
+
+    for (let i = 0; i < particleCount; i++) {
+        particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 3 + 2,
+            speedY: Math.random() * 0.8 + 0.4,
+            speedX: Math.sin(Math.random()) * 0.5,
+            angle: Math.random() * 360,
+            spin: Math.random() * 0.02 - 0.01,
+            color: Math.random() > 0.4 ? 'rgba(197, 155, 39, 0.45)' : 'rgba(126, 18, 30, 0.35)'
+        });
     }
 
-    if (!x || !y) return;
+    function renderPetals() {
+        ctx.clearRect(0, 0, width, height);
 
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.style.left = (x - 6) + "px";
-    heart.style.top = (y - 6) + "px";
+        particles.forEach(p => {
+            p.y += p.speedY;
+            p.x += Math.sin(p.angle) * 0.4;
+            p.angle += p.spin;
 
-    document.body.appendChild(heart);
+            if (p.y > height + 10) {
+                p.y = -10;
+                p.x = Math.random() * width;
+            }
+
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.angle);
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.ellipse(0, 0, p.radius * 1.5, p.radius, Math.PI / 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        });
+
+        requestAnimationFrame(renderPetals);
+    }
+
+    renderPetals();
+}
+
+/**
+ * ====================================================================
+ * GOOGLE CALENDAR & ADD TO CALENDAR
+ * ====================================================================
+ */
+function addToGoogleCalendar(eventId) {
+    let title = "";
+    let details = "";
+    let location = "";
+    let dates = "";
+
+    if (eventId === 'haldi') {
+        title = encodeURIComponent("Haldi Ceremony — Dr. Misba & Zubair");
+        details = encodeURIComponent("Haldi Ceremony (6:00 PM) followed by Dinner (7:00 PM). Hosted by Mr. Haji Zainul Abedin Kamaluddin & Angur Family.");
+        location = encodeURIComponent("10 Angur House, Golden Park, Taslim Soc Road, Vatva, Ahmedabad, Gujarat");
+        // 20261214T123000Z to 20261214T163000Z (18:00 - 22:00 IST)
+        dates = "20261214T123000Z/20261214T163000Z";
+    } else {
+        title = encodeURIComponent("Nikah Ceremony & Reception — Dr. Misba & Zubair");
+        details = encodeURIComponent("Nikah Ceremony & Wedding Programme. Arrival of Barat at 6:00 PM, Dinner & Reception at 7:00 PM. Hosted by Angur Family.");
+        location = encodeURIComponent("Palm Green Club & Resort, NH. No. 08, Kheda Highway, Goblej, Gujarat");
+        // 20261216T123000Z to 20261216T180000Z (18:00 - 23:30 IST)
+        dates = "20261216T123000Z/20261216T180000Z";
+    }
+
+    const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=${location}&dates=${dates}`;
+    window.open(gCalUrl, '_blank');
+}
+
+/**
+ * ====================================================================
+ * PHOTO GALLERY LIGHTBOX SYSTEM
+ * ====================================================================
+ */
+const galleryImages = [
+    { src: 'assests/images/venue1.jpg', caption: 'Grand Wedding Lawn & Banquet Decor · Palm Green Club & Resort' },
+    { src: 'assests/images/venue2.png', caption: 'Royal Resort Architecture & Palm Landscape · Palm Green Club & Resort' },
+    { src: 'assests/images/venue3.png', caption: 'Grand Celebration Lawn & Night Illuminations · Palm Green Club & Resort' },
+    { src: 'assests/images/venue4.png', caption: 'Poolside Luxury Wedding Ambience · Palm Green Club & Resort' }
+];
+
+let activeLightboxIndex = 0;
+
+function openLightbox(index) {
+    const lightbox = document.getElementById('galleryLightbox');
+    const activeImg = document.getElementById('lightboxActiveImg');
+    const captionEl = document.getElementById('lightboxCaption');
+    const counterEl = document.getElementById('lightboxCounter');
+
+    if (!lightbox || !activeImg) return;
+
+    activeLightboxIndex = (index + galleryImages.length) % galleryImages.length;
+    const item = galleryImages[activeLightboxIndex];
+
+    activeImg.src = item.src;
+    if (captionEl) captionEl.innerText = item.caption;
+    if (counterEl) counterEl.innerText = `${activeLightboxIndex + 1} / ${galleryImages.length}`;
+
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('galleryLightbox');
+    if (!lightbox) return;
+    lightbox.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+function navigateLightbox(dir) {
+    openLightbox(activeLightboxIndex + dir);
+}
+
+// Keyboard navigation
+window.addEventListener('keydown', (e) => {
+    const lightbox = document.getElementById('galleryLightbox');
+    if (!lightbox || !lightbox.classList.contains('active')) return;
+
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') navigateLightbox(-1);
+    if (e.key === 'ArrowRight') navigateLightbox(1);
+});
+
+// Mobile touch swipe for lightbox
+let touchStartX = 0;
+let touchEndX = 0;
+
+const lightboxEl = document.getElementById('galleryLightbox');
+if (lightboxEl) {
+    lightboxEl.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    lightboxEl.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+}
+
+function handleSwipe() {
+    const diff = touchEndX - touchStartX;
+    if (Math.abs(diff) > 45) {
+        if (diff > 0) {
+            navigateLightbox(-1); // Swipe right -> Previous
+        } else {
+            navigateLightbox(1);  // Swipe left -> Next
+        }
+    }
+}
+
+/**
+ * ====================================================================
+ * RSVP SYSTEM (WhatsApp Submission + Local Storage)
+ * ====================================================================
+ */
+function handleRsvpSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const submitter = e.submitter ? e.submitter.value : 'whatsapp';
+
+    const guestName = document.getElementById('guestName').value.trim();
+    const attendanceStatus = form.elements['attendanceStatus'].value;
+    const guestCount = document.getElementById('guestCount').value;
+    const attendingEvents = document.getElementById('attendingEvents').value;
+    const guestDua = document.getElementById('guestDua').value.trim();
+
+    if (!guestName) {
+        showToast("Please enter your name");
+        return;
+    }
+
+    const familyWaNumber = (window.WEDDING_CONFIG && window.WEDDING_CONFIG.contact) ? window.WEDDING_CONFIG.contact.whatsappNumber : "919824048963";
+
+    if (submitter === 'whatsapp') {
+        let msg = `*WEDDING RSVP — Dr. Misba & Zubair*\n\n`;
+        msg += `Assalamu Alaikum / Greetings,\n`;
+        msg += `• *Guest Name:* ${guestName}\n`;
+        msg += `• *Attendance:* ${attendanceStatus === 'Accept' ? '✅ Joyfully Accepting' : '❌ Regretfully Declining'}\n`;
+        if (attendanceStatus === 'Accept') {
+            msg += `• *Total Guests:* ${guestCount}\n`;
+            msg += `• *Attending Events:* ${attendingEvents}\n`;
+        }
+        if (guestDua) {
+            msg += `• *Dua / Wishes:* ${guestDua}\n`;
+        }
+        msg += `\nThank you for the warm invitation!`;
+
+        const waUrl = `https://wa.me/${familyWaNumber}?text=${encodeURIComponent(msg)}`;
+        window.open(waUrl, '_blank');
+        showToast("Opening WhatsApp to send your RSVP...");
+    } else {
+        // Save locally to browser
+        const rsvpData = {
+            name: guestName,
+            status: attendanceStatus,
+            guests: guestCount,
+            events: attendingEvents,
+            message: guestDua,
+            submittedAt: new Date().toISOString()
+        };
+
+        try {
+            const existing = JSON.parse(localStorage.getItem('wedding_rsvps') || '[]');
+            existing.push(rsvpData);
+            localStorage.setItem('wedding_rsvps', JSON.stringify(existing));
+        } catch (err) {
+            console.warn("Could not save to localStorage:", err);
+        }
+
+        const feedbackBox = document.getElementById('rsvpSuccessFeedback');
+        if (feedbackBox) {
+            feedbackBox.className = "rsvp-feedback-box success";
+            feedbackBox.innerHTML = `Alhamdulillah! Jazakallah Khair <strong>${guestName}</strong>.<br>Your RSVP has been saved. We eagerly await celebrating together!`;
+        }
+        showToast("RSVP saved successfully! ✨");
+    }
+}
+
+/**
+ * ====================================================================
+ * SHARING & CLIPBOARD UTILITIES
+ * ====================================================================
+ */
+function shareOnWhatsApp() {
+    const pageUrl = window.location.href;
+    const text = `*Wedding Invitation — Dr. Misba & Zubair*\n\nIn the name of Allah, the Most Beneficent & Merciful.\nYou are cordially invited to celebrate the Nikah of Dr. Misba & Zubair on 16th December 2026.\n\nView the interactive digital invitation card:\n${pageUrl}`;
+    const waUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    window.open(waUrl, '_blank');
+}
+
+function copyInvitationLink() {
+    const pageUrl = window.location.href;
+    const copyTextEl = document.getElementById('copyLinkText');
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(pageUrl).then(() => {
+            if (copyTextEl) copyTextEl.innerText = "Link Copied! ✓";
+            showToast("Invitation link copied to clipboard! 📋");
+            setTimeout(() => {
+                if (copyTextEl) copyTextEl.innerText = "Copy Link";
+            }, 2500);
+        }).catch(() => {
+            fallbackCopyText(pageUrl);
+        });
+    } else {
+        fallbackCopyText(pageUrl);
+    }
+}
+
+function fallbackCopyText(text) {
+    const input = document.createElement('input');
+    input.value = text;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('copy');
+    document.body.removeChild(input);
+    showToast("Invitation link copied! 📋");
+}
+
+/**
+ * Toast Notification Helper
+ */
+function showToast(message) {
+    const toast = document.getElementById('toastNotification');
+    if (!toast) return;
+    toast.innerText = message;
+    toast.classList.add('active');
 
     setTimeout(() => {
-        heart.remove();
-    }, 1000);
+        toast.classList.remove('active');
+    }, 2800);
 }
 
-document.addEventListener('mousemove', createHeart);
-document.addEventListener('touchmove', createHeart, { passive: true });
+/**
+ * ====================================================================
+ * ❤️ FLOATING RED HEARTS TRAIL EFFECT (Touch & Mouse Cursor)
+ * Inspired by hafsa-weds-anas.vercel.app
+ * ====================================================================
+ */
+(function setupHeartTrail() {
+    let lastHeartSpawnTime = 0;
+
+    function spawnHeartAt(x, y) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.style.left = (x - 6) + "px";
+        heart.style.top = (y - 6) + "px";
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 1000);
+    }
+
+    function createHeart(e) {
+        const now = Date.now();
+        if (now - lastHeartSpawnTime < 35) return; // 35ms throttle for silky smooth 60fps performance
+        lastHeartSpawnTime = now;
+
+        if (e.touches && e.touches.length > 0) {
+            for (let i = 0; i < e.touches.length; i++) {
+                spawnHeartAt(e.touches[i].clientX, e.touches[i].clientY);
+            }
+        } else {
+            spawnHeartAt(e.clientX, e.clientY);
+        }
+    }
+
+    document.addEventListener('mousemove', createHeart, { passive: true });
+    document.addEventListener('touchstart', createHeart, { passive: true });
+    document.addEventListener('touchmove', createHeart, { passive: true });
+})();
