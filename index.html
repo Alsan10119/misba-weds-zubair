@@ -40,7 +40,7 @@
         <source src="assests/audio/music1.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Floating Global Actions Bar (Music, Quick RSVP, Share) -->
+    <!-- Floating Global Actions Bar (Music, Quick RSVP) -->
     <div class="floating-controls" id="floatingControls">
         <button id="musicToggle" class="control-btn music-btn" aria-label="Toggle background music" title="Toggle Music">
             <span class="music-bars" id="musicBars">
@@ -53,10 +53,6 @@
             <iconify-icon icon="solar:letter-bold-duotone"></iconify-icon>
             <span class="btn-tooltip">RSVP</span>
         </a>
-
-        <button id="quickShareBtn" class="control-btn share-btn" aria-label="Share invitation on WhatsApp" title="Share Invitation">
-            <iconify-icon icon="solar:share-circle-bold-duotone"></iconify-icon>
-        </button>
     </div>
 
     <!-- ====================================================================
@@ -586,25 +582,6 @@
             </div>
         </section>
 
-        <!-- WhatsApp Sharing & Social Link Section -->
-        <section class="card-section share-section">
-            <div class="card-inner scroll-animate">
-                <span class="section-badge">SPREAD THE JOY</span>
-                <h2 class="section-title">Share The Invitation</h2>
-                <p class="section-subtitle">SHARE THIS INVITATION WITH YOUR FAMILY &amp; FRIENDS</p>
-
-                <div class="share-buttons-container">
-                    <button class="share-action-btn share-wa" onclick="shareOnWhatsApp()">
-                        <iconify-icon icon="logos:whatsapp-icon"></iconify-icon>
-                        <span>Share on WhatsApp</span>
-                    </button>
-                    <button class="share-action-btn share-copy" onclick="copyInvitationLink()">
-                        <iconify-icon icon="solar:copy-bold-duotone"></iconify-icon>
-                        <span id="copyLinkText">Copy Link</span>
-                    </button>
-                </div>
-            </div>
-        </section>
 
         <!-- With Best Compliments & Islamic Farewell -->
         <footer class="invitation-footer">

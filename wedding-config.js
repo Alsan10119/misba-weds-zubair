@@ -164,7 +164,7 @@ const WEDDING_CONFIG = {
     showFamilyList: true,
     showRsvpWhatsApp: true,
     showRsvpLocalStore: true,
-    showShareButtons: true
+    showShareButtons: false
   }
 };
 
